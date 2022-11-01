@@ -4,11 +4,10 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
-	paginate "github.com/gobeam/mongo-go-pagination"
 )
 
 type MongoDbPaginationProvider struct {
-	paginationData  *paginate.PaginationData
+	paginationData  *PaginationData
 	paginationQuery *PaginationQuery
 }
 
@@ -37,7 +36,7 @@ func (provider *MongoDbPaginationProvider) GetPaginationResult(ctx *gin.Context)
 	}
 }
 
-func (provider *MongoDbPaginationProvider) SetPaginationData(paginationData *paginate.PaginationData) {
+func (provider *MongoDbPaginationProvider) SetPaginationData(paginationData *PaginationData) {
 	provider.paginationData = paginationData
 }
 

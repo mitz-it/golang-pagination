@@ -1,6 +1,10 @@
 package pagination
 
-import "errors"
+import (
+	"errors"
+
+	paginate "github.com/gobeam/mongo-go-pagination"
+)
 
 type SortOrientation int
 
@@ -36,6 +40,26 @@ type PaginationQuery struct {
 	Page   int64           `json:"page"`
 	Sort   SortOrientation `json:"sort"`
 	SortBy string          `json:"sortBy"`
+}
+
+type PaginationData struct {
+	Total     int64 `json:"total"`
+	Page      int64 `json:"page"`
+	PerPage   int64 `json:"perPage"`
+	Prev      int64 `json:"prev"`
+	Next      int64 `json:"next"`
+	TotalPage int64 `json:"totalPage"`
+}
+
+func ToPaginationData(paginationData paginate.PaginationData) *PaginationData {
+	return &PaginationData{
+		Total:     paginationData.Total,
+		Page:      paginationData.Page,
+		PerPage:   paginationData.PerPage,
+		Prev:      paginationData.Prev,
+		Next:      paginationData.Next,
+		TotalPage: paginationData.TotalPage,
+	}
 }
 
 type PaginationResult struct {
