@@ -18,9 +18,10 @@ func (provider *MongoDbPaginationProvider) GetPaginationQuery(ctx *gin.Context) 
 }
 
 func (provider *MongoDbPaginationProvider) GetPaginationResult(ctx *gin.Context) *PaginationResult {
+	prev := provider.getPrev()
 	baseURL := provider.getBaseURL(ctx)
 	pageURL := provider.getPageURL(baseURL)
-	prevURL := provider.getPrevURL(baseURL)
+	prevURL := provider.getPrevURL(baseURL, prev)
 	nextURL := provider.getNextURL(baseURL)
 	return &PaginationResult{
 		BaseURL:    baseURL,
@@ -30,7 +31,7 @@ func (provider *MongoDbPaginationProvider) GetPaginationResult(ctx *gin.Context)
 		Total:      provider.paginationData.Total,
 		Page:       provider.paginationData.Page,
 		PerPage:    provider.paginationData.PerPage,
-		Prev:       provider.paginationData.Prev,
+		Prev:       prev,
 		Next:       provider.paginationData.Next,
 		TotalPages: provider.paginationData.TotalPage,
 	}
@@ -38,6 +39,16 @@ func (provider *MongoDbPaginationProvider) GetPaginationResult(ctx *gin.Context)
 
 func (provider *MongoDbPaginationProvider) SetPaginationData(paginationData *PaginationData) {
 	provider.paginationData = paginationData
+}
+
+func (provider *MongoDbPaginationProvider) getPrev() int64 {
+	prev := provider.paginationData.Prev
+
+	if prev == 0 {
+		prev = 1
+	}
+
+	return prev
 }
 
 func (provider *MongoDbPaginationProvider) getBaseURL(ctx *gin.Context) string {
@@ -55,8 +66,8 @@ func (provider *MongoDbPaginationProvider) getPageURL(baseURL string) string {
 	return pageURL
 }
 
-func (provider *MongoDbPaginationProvider) getPrevURL(baseURL string) string {
-	prevURL := provider.getBaseQueryString(baseURL, provider.paginationData.Prev)
+func (provider *MongoDbPaginationProvider) getPrevURL(baseURL string, prev int64) string {
+	prevURL := provider.getBaseQueryString(baseURL, prev)
 
 	prevURL = provider.appendSortBy(prevURL)
 
