@@ -29,17 +29,17 @@ func getSize(ctx *gin.Context) (int64, error) {
 	return int64(size), nil
 }
 
-func getSort(ctx *gin.Context) (*SortOrientation, error) {
+func getSort(ctx *gin.Context) (SortOrientation, error) {
 	sort := ctx.Request.URL.Query().Get("sort")
 
 	if sort == "" {
 		err := errors.New("sort parameter was not in the query string")
-		return nil, err
+		return 0, err
 	}
 
 	sortOrientation := ToSortOrientation(sort)
 
-	return &sortOrientation, nil
+	return sortOrientation, nil
 }
 
 func getSortBy(ctx *gin.Context) string {
@@ -68,10 +68,12 @@ func buildPaginationQuery(ctx *gin.Context, fallbacks []FallBackPaginationFunc) 
 
 	sort, err := getSort(ctx)
 
-	if *sort == ASC || *sort == DESC {
-		paginationQuery.Sort = *sort
-	} else if err != nil && sort == nil && paginationQuery.Sort == 0 {
-		paginationQuery.Sort = defaultSort
+	if err != nil {
+		if paginationQuery.Sort == 0 {
+			paginationQuery.Sort = defaultSort
+		}
+	} else {
+		paginationQuery.Sort = sort
 	}
 
 	sortBy := getSortBy(ctx)
