@@ -11,8 +11,8 @@ type MongoDbPaginationProvider struct {
 	paginationQuery *PaginationQuery
 }
 
-func (provider *MongoDbPaginationProvider) GetPaginationQuery(ctx *gin.Context) *PaginationQuery {
-	paginationQuery := buildPaginationQuery(ctx)
+func (provider *MongoDbPaginationProvider) GetPaginationQuery(ctx *gin.Context, fallbacks ...FallBackPaginationFunc) *PaginationQuery {
+	paginationQuery := buildPaginationQuery(ctx, fallbacks)
 	provider.paginationQuery = paginationQuery
 	return paginationQuery
 }

@@ -5,7 +5,7 @@ import (
 )
 
 type IPaginationProvider interface {
-	GetPaginationQuery(ctx *gin.Context) *PaginationQuery
+	GetPaginationQuery(ctx *gin.Context, fallback ...FallBackPaginationFunc) *PaginationQuery
 	GetPaginationResult(ctx *gin.Context) *PaginationResult
 	SetPaginationData(paginationData *PaginationData)
 }

@@ -35,6 +35,12 @@ func (sort SortOrientation) String() string {
 	}
 }
 
+type FallBackPaginationFunc func(config *PaginationQuery)
+
+const defaultPage int64 = 1
+const defaultSize int64 = 50
+const defaultSort SortOrientation = ASC
+
 type PaginationQuery struct {
 	Size   int64           `json:"size"`
 	Page   int64           `json:"page"`
