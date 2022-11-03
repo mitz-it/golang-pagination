@@ -60,10 +60,18 @@ func buildPaginationQuery(ctx *gin.Context, fallbacks []FallBackPaginationFunc) 
 		paginationQuery.Page = page
 	}
 
+	if paginationQuery.Page == 0 {
+		paginationQuery.Page = defaultPage
+	}
+
 	size, err := getSize(ctx)
 
 	if err == nil {
 		paginationQuery.Size = size
+	}
+
+	if paginationQuery.Size == 0 {
+		paginationQuery.Size = defaultSize
 	}
 
 	sort, err := getSort(ctx)
